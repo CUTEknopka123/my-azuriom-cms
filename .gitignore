@@ -1,0 +1,8 @@
+mysql/
+www/
+node_modules/
+vendor/
+.env
+*.log
+Azuriom.zip
+.DS_Store

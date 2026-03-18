@@ -1,0 +1,26 @@
+services:
+  cms:
+    build: .
+    container_name: azuriom_app
+    # Запускаем сразу от имени веб-сервера
+    user: "root" 
+    command: sh -c "chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && apache2-foreground"
+    ports:
+      - "80:80"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_DATABASE=azuriom
+      - DB_USERNAME=azuriom
+      - DB_PASSWORD=secret_pass
+    depends_on:
+      - db
+  db:
+    image: mariadb:10.11 # MariaDB часто стабильнее для CMS, чем MySQL 8
+    environment:
+      - MYSQL_DATABASE=azuriom
+      - MYSQL_USER=azuriom
+      - MYSQL_PASSWORD=secret_pass
+      - MYSQL_ROOT_PASSWORD=root_pass
+    volumes:
+      - ./mysql:/var/lib/mysql
